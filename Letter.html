@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Up My Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-dancing { font-family: 'Dancing Script', cursive; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        
+        /* Glow effect for button */
+        .glow-btn {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glow-btn:hover {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+        
+        /* Gradient background */
+        .sky-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Balloon animation */
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: float-up 6s ease-in-out infinite;
+        }
+        
+        @media (min-width: 768px) {
+            .balloon {
+                width: 60px;
+                height: 80px;
+            }
+        }
+        
+        .balloon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: #333;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+        }
+        
+        @media (min-width: 768px) {
+            .balloon::after {
+                height: 60px;
+            }
+        }
+        
+        /* Confetti animation */
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            animation: confetti-fall 3s ease-in-out infinite;
+        }
+        
+        @media (min-width: 768px) {
+            .confetti {
+                width: 10px;
+                height: 10px;
+            }
+        }
+        
+        /* Heart rain animation */
+        @keyframes heart-fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .heart {
+            position: absolute;
+            width: 16px;
+            height: 14px;
+            animation: heart-fall 4s ease-in-out infinite;
+        }
+        
+        @media (min-width: 768px) {
+            .heart {
+                width: 20px;
+                height: 18px;
+            }
+        }
+        
+        .heart::before,
+        .heart::after {
+            content: '';
+            width: 8px;
+            height: 12px;
+            position: absolute;
+            left: 8px;
+            background: #ff69b4;
+            border-radius: 8px 8px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+        
+        @media (min-width: 768px) {
+            .heart::before,
+            .heart::after {
+                width: 10px;
+                height: 16px;
+                left: 10px;
+                border-radius: 10px 10px 0 0;
+            }
+        }
+        
+        .heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
+        /* Banner slide animation */
+        @keyframes slide-down {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .banner {
+            animation: slide-down 1s ease-out;
+        }
+        
+        /* Letter animation */
+        @keyframes letter-appear {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .letter-appear {
+            animation: letter-appear 1.5s ease-out;
+        }
+        
+        /* Fade out animation */
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+        
+        /* Background transition */
+        .bg-transition {
+            transition: background 2s ease-in-out;
+        }
+        
+        /* Letter styling */
+        .letter-paper {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .letter-content {
+            background: linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-900 bg-transition overflow-hidden" id="body">
+    <!-- Initial Dark Screen with Button -->
+    <div class="min-h-screen flex items-center justify-center px-4" id="initial-screen">
+        <div class="text-center">
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-dancing text-white mb-8 md:mb-12 opacity-80">
+                Light Up My Life
+            </h1>
+            <button 
+                id="light-btn"
+                class="px-8 sm:px-12 py-4 sm:py-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-lg sm:text-xl md:text-2xl font-playfair font-semibold rounded-full glow-btn hover:from-pink-600 hover:to-purple-700 transition-all duration-300"
+            >
+                Turn the Lights On ✨
+            </button>
+        </div>
+    </div>
+    
+    <!-- Celebration Screen (Hidden Initially) -->
+    <div id="celebration-screen" class="hidden">
+        <!-- Banner -->
+        <div id="banner" class="fixed top-4 sm:top-8 left-1/2 transform -translate-x-1/2 z-50 hidden px-4">
+            <div class="bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 text-white px-4 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-2xl banner">
+                <h2 class="text-xl sm:text-2xl md:text-4xl font-dancing font-bold text-center">
+                    🎉 Happy Birthday Madam Ji 🎉
+                </h2>
+            </div>
+        </div>
+        
+        <!-- Letter Section -->
+        <div id="letter-section" class="fixed inset-0 flex items-center justify-center p-4 sm:p-6 z-40 hidden">
+            <div class="letter-paper rounded-3xl p-6 sm:p-8 md:p-12 max-w-sm sm:max-w-md md:max-w-2xl w-full max-h-[80vh] overflow-y-auto letter-appear">
+                <div class="letter-content rounded-2xl p-4 sm:p-6 md:p-8">
+                    <div class="text-center mb-6 sm:mb-8">
+                        <h3 class="text-2xl sm:text-3xl md:text-4xl font-dancing text-purple-600 mb-2">
+                            Dear Madam Ji,
+                        </h3>
+                        <div class="w-16 sm:w-20 md:w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-400 mx-auto rounded-full"></div>
+                    </div>
+                    
+                    <div class="space-y-4 sm:space-y-6 text-gray-700 font-playfair">
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed">
+                            Happy to you tooo youu my girl, my motuuu , my diyaiiiii , my cuiteee ❤️ I loveee you sooo much motuuuuu❤️❤️❤️🧿I know sometimes I irritate youuu,sometimes I hurt youuu, some times I overreact alsooo  but thatsss because I loveee youuu so muchhhh and i feel comfortable withhh youuu 🥹❤️❤️❤️❤️❤️🧿🧿🧿🧿✨❤️You're the person I can tell my secrets to the first person I want to talk to when I wake up, and last person want to talk to before drift off to sleep.
+When something good happens, o you're the first person I want to tell. When I'm troubled by something or if get a bad news, you're the one go to for support. But you're so much more to me than a friend or someone who helps me in tough times, you're the love of my life,You're my friend, my lover, my comfort, and my strength,I am so lucky to have you❤️❤️❤️😭😭😭😭😭🥹❤️❤️🧿You're the person I can tell my secrets to the first person I want to talk to when I wake up, and last person want to talk to before drift off to sleep,When something good happens, o you're the first person I want to tell. When I'm troubled by something or if get a bad news, you're the one go to for support. But you're so much more to me than a friend or someone who helps me in tough times, you're the love of my life,You're mine motuuu, my lover, my comfort, and my strength,I am so lucky to have you❤️❤️❤️😭😭😭😭😭🥹❤️❤️🧿And i soryyyy for all my mistakes mene tujhe hurt kiya and mehhh kabhi ek acha dost nhi bnnn pyaaa and mene kabhiii tujhe life mehhh khushiya nhi Dii humesha ekkk kaleshhiiii bn kr rha tujhe rokkk tokkk kriiii mene hr chijjjj kiiii i am soo soo soryyyyy motuuuuuu mujhe ho skheee toh maffff krdenaaa i am sryyyy yrrrr🙏🙏❤️Motuuuuu tuuu bleeee mujjjj seee kitniiiii barrrr bhiii ldddd leee jgddddd leee mehhhh kabhiii durrrr nhiii ho sktaaa terseeee tuuuu bleee mujhe ignore kr leee kitna bhiiii mehhh humesha se tera baby doll hiiii rahungaaa ❤️😭mana mehhh achaaa nhiiiii mehhh humesha tujjjj se ladtaaa hu butttt fir mehhh nhiii rehhhh phtaaaaa tere binaaaa motuuuuuu joooo happynesss tuneee mujheee diiii voh mujhe or koiiii kabhiiii nhiii de sktaaa motuuuuuuu ❤️😭tuuu mere sthhh hotiiii haiii jbbb mere face pr smile hotiiii haiii mehhh sbbb kuchhhh bhullll jata huuuu yrrr tuuuu mujhe kabhiiii nhiiii chodddd sktiiiii mehhh tera babyyyy dollll huuuu nha motuuuuuu😭😭❤️ loveeeeee youuuuu motuuuuuu yr❤️❤️❤️😭🧿Diyaiiii pls mujhe ese akelaaa mt kr yrrr diyaiiii meh tujhe jitna mantaaa hu utnaaa mehhh kisi ko nhi manta yrrrrr diyaiiiii pls Kuch bhi galtiiii huiiii hai mujhe bata kuch batttt buriiii lgiiii bataaa mujhe kuch hurt hua Voh bata buttttt tu plsss bol toh shiiii mujheeee plssss diyaaaiiiii plsss yrrr mujhe joooo krna pdega mehhh krunga butttt ese hiiii nhi jane dunga tujhe kabhiiii nhiiii never ever mujhe nhi haiii kuch bhi pyraaa mere passs koi self respect nhi haiiii mere passs kuch nhiiii haiiiiiii bhaiii jbbbb tu nhi hotiiii nha mehhhh bilkul blank hotaaaa huuuu bsss meh ese hi chllll rhaaa hotaaa huuuuu diyaiiiiiiii nha mera kisi kammm meh mnnn lgta nha kyaaa bsss blankkk sbbb kuch bhai kuch smjjjj nhi ataaaa diyaaa pls mujhe Jo bhiiii mujhe bataaa mere ko bata mujhe Meri galti plsss diya jbbb tk tuuu bolegiiii nhiii jbb tk mehhh kese smjuuuu kuchhh yr diyaiiii plssss telll me yr mehhh nhi chod skta means nhiii kabhi nhiiii never ever smjiii nha mujhe tu hi chaiye means tu hi uske liye mujhe kuch bhi krna pdega meh krunga abbb
+Meri kisi battt ka tujhe hurt hua ho yaha meriii vjeee se tujhe hurt hua hooo mujhe bataaa yr diyaiiii pls plsss diyaiiii.
+Diyaiii tu hi mujhe khaaa krtiii thi mujhe chodega toh nhi nha kabhi tuuu hi thiii jisneee mujhe itna support kiya hr mere bureee time mehhh hrrr ekkk chij you areee the one who feels me like kiii Han rohit meh hu tere sth and your that one person who feels me special bhai seriously kehhh rhaaa hu meh mujhe itna special feel aajjj tk kisi ne nhi krvya itna kuch kiyaaa mere liye bhaiiii kabhiii kisiii nehhh nhi kiya mere liye itna diyaiiii tuuuu mujhe galiiii bhiii degiiiii tuuuu mujheeee chata bhi lgaaaa degiiii mehhh kuch nhi bolungaaa kabhiiii tujhe bsss meh nhi jane dunga toh nhi janeee dunga bs diyaiiiii diyaiiii bsss mene tujhe gusse meh akrrr glt bhi bola hoga chilyaaa bhi hoga sorry sorry diyaiiiii Mene khi barrr juth bhi bola hoga sbbb chij ke liye soryyyyy butttt meh tujhe nhi jane dunga means nhiii
+Tuuuuu mujhe block kr degiiii kuch bhi kr degiiiii idc yrrrrrr butttt mere dilll se kabhi nhi jyegiiiii diyaiiiiii tuuuu hi thi jisne mujhe baby doll name diya kha gyiiii meriii Voh diyaiiiii kha yrrr pls bata de nha merse kya hua hai diyaiiii plsssss yr
+Tu keh rhi thi meh 11:11 pr wish mngtiiii hu merse dur hojayeee diyaiiii yeah sbbbb meh kabhi nhi mannn skta kabhiii diyaiiii puch ekkk barrr apneeee dillll se or apne aap se diyaiiii meh humesha mandir meh puchti hai nha kya mangta haiii mehhh humesha se hi yeah bolta huuu meriiii motuuuu ko mujhhh se kabhi dur mttt krna bleee mujhe kuch hojaye meriii motuuuu ke face pr humesha se smile rehniiii chaiye mehhh Usse bhot hurt krta huuu bhot rulata huuu i am soryyy but uskooo merse kabhi dur mt karnaaa khana ji Jese apkiii yeah Radha hai vese meriii motuuuu hai ble kuch hojaye merse dur mtttt krna kabhi bhi iskooo ,iskooo humesha se khush rkhnaaa 
+Diyaiiii mehhh nhi jane de skta means nhiii Toh nhii Bleee Kuch bhi hooo mujhe jooo krna pdega mehhhh krunga mujhe koi ijattttt pyriiii nhi hai apniiii Bs diyaiiii Tu mujhe kuchhh bhi bolll sbbb sununga mehhh meh nhi jane dunga mtlb nhi toh nhiiiii Tu boltiii haiii career hai meraaa Diyaiii Mene kabhi tujhe tere pdhaiii ke liye nhi rokaaa Kabhiii mana nhi kraaa Sbbb hota haiiii Pdhaiii bhiii Tu mujhe din meh 1 ghanta bhi bolegiii isss time pr bsss battt krungiiii meh khush hojunga yr Tujhe pata haiii jbbb tuuu merse battt krti haiii nha toh mujhe lgta haiiii koi toh haiii mere sthhhh jo mujhe motivate krta haiii meriii hr chij meh support krta hai
+Seriously jitna lgavvvv mujhe tujjj se haiii nha utna kisi se bhi nhi haiii
+Seriously diyaiii meh grh se bhi itna attached nhi huuu jitna terse hogya huuuu bssss
+Diyaiiii bsss kr yrrrr pls diyaiiiii.
+Jisss insannn kooo jooo chijjj mil jatiii hai uskiii kadrrrr krna bhul jata haiii i am right nha diyaiiii khi nha khi mene bhi esaaa hi kiya hai diyaiiii tere sth haina
+Diyaiiii mujhe meriii hr ek chij pata haiii jo Mene tere sth ki hai tujhe hurt krna rulanaaa juthhh bolna
+Ik yrrr every thing diyaiii
+I am so so sorry diyaiiii 
+Ese mujhe akelaaaa nhi kr sktiiii mujhe tuuuuuu yaha tk sthhhh hai Meri life mehhh toh agge bhi rehna hai tujhe mujhe hr ekkk chij meriii life kiiii mujheee sbbb tere sthhh dekhniii hai diyaiiii tujhe btnaaaa hai mujhe hr ekkk batttt diyaiiiii nhiii chodegiiii tuuuu mujhe kuch bhi hojaye nhi jane dunga mehhh diyaiiii noooo noooo nooo Bhaiiii tuuuu bestttt haiii motuuuuuu ekkkk dmmm bestttt yrrrr mene kabhi life meh tere jesiii ladkiii nhi dekhiii i  swayyy yrrr bhaiii tuuu bestttt hai motuuuuu i love youuuu yrrrr ❤️❤️❤️ loveee you loveee soooo much motuuuu yo support me always yrrr motuuuu.Can't think of any times, that's spent with you on call nd chatting 
+Wishing you abundance of love , laughter, success & bliss!
+                        </p>
+                        
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed"
+
+                        </p>
+                        
+                        <p class="text-sm sm:text-base md:text-lg leading-relaxed">
+                            Happyyy to you too youuu once again my motuuuu❤️❤️❤️💗🎈🥹 love you motuuu your baby doll😭❤️🥹.
+                        </p>
+                        
+                        <div class="text-center mt-6 sm:mt-8">
+                            <p class="text-lg sm:text-xl md:text-2xl font-dancing text-pink-600 font-bold">
+                                Wishing you the most wonderful birthday! 🎂✨
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-pink-200">
+                        <p class="text-sm sm:text-base md:text-lg font-dancing text-purple-600">
+                            With love and warm wishes,
+                        </p>
+                        <p class="text-base sm:text-lg md:text-xl font-dancing text-pink-600 font-bold mt-2">
+                            Someone who cares about you 💕
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Balloons Container -->
+        <div id="balloons-container" class="fixed inset-0 pointer-events-none z-20"></div>
+        
+        <!-- Confetti Container -->
+        <div id="confetti-container" class="fixed inset-0 pointer-events-none z-30"></div>
+        
+        <!-- Hearts Container -->
+        <div id="hearts-container" class="fixed inset-0 pointer-events-none z-10"></div>
+    </div>
+
+    <script>
+        const lightBtn = document.getElementById('light-btn');
+        const body = document.getElementById('body');
+        const initialScreen = document.getElementById('initial-screen');
+        const celebrationScreen = document.getElementById('celebration-screen');
+        const banner = document.getElementById('banner');
+        const letterSection = document.getElementById('letter-section');
+        const balloonsContainer = document.getElementById('balloons-container');
+        const confettiContainer = document.getElementById('confetti-container');
+        const heartsContainer = document.getElementById('hearts-container');
+
+        let animationRunning = false;
+
+        lightBtn.addEventListener('click', () => {
+            if (animationRunning) return;
+            animationRunning = true;
+            
+            // Start the magical transformation
+            startCelebration();
+        });
+
+        function startCelebration() {
+            // 1. Fade out the button
+            lightBtn.classList.add('fade-out');
+            
+            // 2. Change background after a short delay
+            setTimeout(() => {
+                body.className = 'min-h-screen sky-gradient bg-transition overflow-hidden';
+                
+                // 3. Hide initial screen and show celebration
+                setTimeout(() => {
+                    initialScreen.style.display = 'none';
+                    celebrationScreen.classList.remove('hidden');
+                    
+                    // 4. Show banner
+                    banner.classList.remove('hidden');
+                    
+                    // 5. Start all animations
+                    startBalloons();
+                    startConfetti();
+                    startHearts();
+                    
+                    // 6. Show letter after all celebrations have started
+                    setTimeout(() => {
+                        letterSection.classList.remove('hidden');
+                    }, 3000);
+                    
+                }, 1000);
+            }, 500);
+        }
+
+        function startBalloons() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#fd79a8'];
+            
+            setInterval(() => {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.left = Math.random() * 90 + '%';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.animationDelay = Math.random() * 2 + 's';
+                balloon.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                
+                balloonsContainer.appendChild(balloon);
+                
+                // Remove balloon after animation
+                setTimeout(() => {
+                    balloon.remove();
+                }, 8000);
+            }, 1200); // Reduced frequency for mobile
+        }
+
+        function startConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#fd79a8', '#00b894', '#fdcb6e'];
+            
+            setInterval(() => {
+                const confettiCount = window.innerWidth < 768 ? 3 : 5; // Fewer confetti on mobile
+                for (let i = 0; i < confettiCount; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 1 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    
+                    confettiContainer.appendChild(confetti);
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }, 400); // Slightly slower on mobile
+        }
+
+        function startHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.style.left = Math.random() * 95 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                
+                heartsContainer.appendChild(heart);
+                
+                // Remove heart after animation
+                setTimeout(() => {
+                    heart.remove();
+                }, 8000);
+            }, 800); // Reduced frequency for mobile
+        }
+
+        // Add some sparkle effect to the button
+        lightBtn.addEventListener('mouseover', () => {
+            lightBtn.style.transform = 'scale(1.05)';
+        });
+        
+        lightBtn.addEventListener('mouseout', () => {
+            lightBtn.style.transform = 'scale(1)';
+        });
+
+        // Close letter when clicking outside (optional)
+        letterSection.addEventListener('click', (e) => {
+            if (e.target === letterSection) {
+                letterSection.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
